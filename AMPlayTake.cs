@@ -2,7 +2,7 @@ using UnityEngine;
 using HutongGames.PlayMaker;
 
 namespace M8.PlayMaker {
-    [ActionCategory("Animator")]
+    [ActionCategory("Mate Animator")]
     [Tooltip("Play a take from the animator timeline.")]
     public class AMPlayTake : FsmStateAction {
         [RequiredField]

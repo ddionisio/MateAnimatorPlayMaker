@@ -1,10 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using HutongGames.PlayMaker;
 
 namespace M8.PlayMaker {
     [ActionCategory("Mate Animator")]
-    [Tooltip("Stop animator timeline.")]
-    public class AMStop : FsmStateAction {
+    [Tooltip("Reverse animator timeline. This will only work if there is a current Take set to AnimatorData (via Play)")]
+    public class AMReverse : FsmStateAction {
         [RequiredField]
         [Tooltip("The Game Object to work with. NOTE: The Game Object must have an AnimatorData component attached.")]
         [CheckForComponent(typeof(AnimatorData))]
@@ -23,7 +23,7 @@ namespace M8.PlayMaker {
         // Code that runs on entering the state.
         public override void OnEnter() {
             InitData();
-            aData.Stop();
+            aData.Reverse();
             Finish();
         }
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 using HutongGames.PlayMaker;
 
 namespace M8.PlayMaker {
-    [ActionCategory("Animator")]
+    [ActionCategory("Mate Animator")]
     [Tooltip("Get the current take that is playing.")]
     public class AMGetCurrentTake : FsmStateAction {
         [RequiredField]

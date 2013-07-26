@@ -2,7 +2,7 @@ using UnityEngine;
 using HutongGames.PlayMaker;
 
 namespace M8.PlayMaker {
-    [ActionCategory("Animator")]
+    [ActionCategory("Mate Animator")]
     [Tooltip("Pause animator timeline.")]
     public class AMPause : FsmStateAction {
         [RequiredField]
