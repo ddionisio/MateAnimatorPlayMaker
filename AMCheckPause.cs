@@ -1,21 +1,22 @@
-using UnityEngine;
+﻿using UnityEngine;
 using HutongGames.PlayMaker;
 
 namespace M8.PlayMaker {
     [ActionCategory("Mate Animator")]
-    [Tooltip("Get the current time of the currently playing Take. Given value is set to 0 if no take is playing.")]
-    public class AMGetCurrentTime : FsmStateAction {
+    [Tooltip("Check to see if animator timeline is paused.")]
+    public class AMCheckPause : FsmStateAction {
         [RequiredField]
         [Tooltip("The Game Object to work with. NOTE: The Game Object must have an AnimatorData component attached.")]
         [CheckForComponent(typeof(AnimatorData))]
         public FsmOwnerDefault gameObject;
 
-        [RequiredField]
         [UIHint(UIHint.Variable)]
-        public FsmFloat storeResult;
+        public FsmBool storeResult;
 
-        public bool fullElapse;
-        public bool everyFrame;
+        public FsmEvent isTrue;
+        public FsmEvent isFalse;
+
+        public FsmBool everyFrame;
 
         private AnimatorData aData;
         private void InitData() {
@@ -28,38 +29,41 @@ namespace M8.PlayMaker {
         }
 
         public override void Reset() {
+            isTrue = null;
+            isFalse = null;
             storeResult = null;
-            fullElapse = false;
-            everyFrame = false;
+            everyFrame = null;
         }
 
         public override void OnEnter() {
             InitData();
-            GrabValue();
-            if(!everyFrame)
+            DoCheck();
+            if(!everyFrame.Value)
                 Finish();
         }
 
         public override void OnUpdate() {
-            GrabValue();
+            DoCheck();
         }
 
-        void GrabValue() {
-            if(aData.currentPlayingTake != null && aData.currentPlayingTake.sequence != null) {
-                storeResult.Value = fullElapse ? aData.currentPlayingTake.sequence.fullElapsed : aData.currentPlayingTake.sequence.elapsed;
-            }
-            else {
-                storeResult.Value = 0.0f;
-            }
-            /*bool playing = aData.isPlaying;
+        void DoCheck() {
+            bool reverse = aData.isPaused;
 
             if(!storeResult.IsNone)
-                storeResult.Value = playing;
+                storeResult.Value = reverse;
 
-            if(playing)
+            if(reverse)
                 Fsm.Event(isTrue);
             else
-                Fsm.Event(isFalse);*/
+                Fsm.Event(isFalse);
+        }
+
+        public override string ErrorCheck() {
+            if(everyFrame.Value &&
+                FsmEvent.IsNullOrEmpty(isTrue) &&
+                FsmEvent.IsNullOrEmpty(isFalse))
+                return "Action sends no events!";
+            return "";
         }
     }
 }

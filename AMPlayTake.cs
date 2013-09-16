@@ -10,7 +10,6 @@ namespace M8.PlayMaker {
         [CheckForComponent(typeof(AnimatorData))]
         public FsmOwnerDefault gameObject;
 
-        [RequiredField]
         public FsmString take;
 
         [Tooltip("Wait for animation to finish before completing this action. Be careful when setting this to true, certain animations loop forever. Also, this is ignored if loop is set to true.")]
@@ -52,13 +51,20 @@ namespace M8.PlayMaker {
             InitData();
 
             if(!startAt.IsNone) {
-                if(startAtIsFrame)
-                    aData.PlayFromFrame(take.Value, startAt.Value, loop.Value);
-                else
-                    aData.PlayFromTime(take.Value, startAt.Value, loop.Value);
+                if(!string.IsNullOrEmpty(take.Value)) {
+                    if(startAtIsFrame)
+                        aData.PlayFromFrame(take.Value, startAt.Value, loop.Value);
+                    else
+                        aData.PlayFromTime(take.Value, startAt.Value, loop.Value);
+                }
             }
             else {
-                aData.Play(take.Value, loop.Value);
+                if(!string.IsNullOrEmpty(take.Value)) {
+                    aData.Play(take.Value, loop.Value);
+                }
+                else {
+                    aData.PlayDefault(loop.Value);
+                }
             }
 
             if(!loop.Value && waitForComplete.Value && aData.currentPlayingTake != null) {
