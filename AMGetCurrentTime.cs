@@ -45,8 +45,8 @@ namespace M8.PlayMaker {
         }
 
         void GrabValue() {
-            if(aData.currentPlayingTake != null && aData.currentPlayingTake.sequence != null) {
-                storeResult.Value = fullElapse ? aData.currentPlayingTake.sequence.fullElapsed : aData.currentPlayingTake.sequence.elapsed;
+            if(aData.currentPlayingSequence != null) {
+                storeResult.Value = fullElapse ? aData.currentPlayingSequence.fullElapsed : aData.currentPlayingSequence.elapsed;
             }
             else {
                 storeResult.Value = 0.0f;

@@ -53,9 +53,9 @@ namespace M8.PlayMaker {
             if(!startAt.IsNone) {
                 if(!string.IsNullOrEmpty(take.Value)) {
                     if(startAtIsFrame)
-                        aData.PlayFromFrame(take.Value, startAt.Value, loop.Value);
+                        aData.PlayAtFrame(take.Value, startAt.Value, loop.Value);
                     else
-                        aData.PlayFromTime(take.Value, startAt.Value, loop.Value);
+                        aData.PlayAtTime(take.Value, startAt.Value, loop.Value);
                 }
             }
             else {
@@ -67,9 +67,9 @@ namespace M8.PlayMaker {
                 }
             }
 
-            if(!loop.Value && waitForComplete.Value && aData.currentPlayingTake != null) {
+            if(!loop.Value && waitForComplete.Value && aData.currentPlayingSequence != null) {
                 sequenceWaitCompleted = false;
-                aData.currentPlayingTake.sequenceCompleteCallback += SequenceComplete;
+                aData.takeCompleteCallback += SequenceComplete;
             }
             else {
                 sequenceWaitCompleted = true;
@@ -79,13 +79,13 @@ namespace M8.PlayMaker {
 
         public override void OnExit() {
             //just in case
-            if(!sequenceWaitCompleted && aData != null && aData.currentPlayingTake != null)
-                aData.currentPlayingTake.sequenceCompleteCallback -= SequenceComplete;
+            if(!sequenceWaitCompleted && aData != null && aData.currentPlayingSequence != null)
+                aData.takeCompleteCallback -= SequenceComplete;
         }
 
-        public void SequenceComplete(AMTake take) {
+        public void SequenceComplete(AnimatorData anim, AMTakeData take) {
             sequenceWaitCompleted = true;
-            take.sequenceCompleteCallback -= SequenceComplete;
+            anim.takeCompleteCallback -= SequenceComplete;
 
             if(!FsmEvent.IsNullOrEmpty(waitForCompleteEvent))
                 Fsm.Event(waitForCompleteEvent);
