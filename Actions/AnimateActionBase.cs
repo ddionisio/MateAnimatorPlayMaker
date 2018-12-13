@@ -13,15 +13,14 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
         public FsmOwnerDefault gameObject;
 
         protected Animate animate { get; private set; }
-
-        private GameObject mAnimGO;
+        protected GameObject animateGO { get; private set; }
 
         // Code that runs on entering the state.
         public override void OnEnter() {
             var curGO = Fsm.GetOwnerDefaultTarget(gameObject);
-            if(animate == null || curGO != mAnimGO) {
-                mAnimGO = curGO;
-                animate = mAnimGO.GetComponent<Animate>();
+            if(animate == null || curGO != animateGO) {
+                animateGO = curGO;
+                animate = animateGO.GetComponent<Animate>();
             }
         }
     }

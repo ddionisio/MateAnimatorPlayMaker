@@ -12,10 +12,8 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
 
         [Tooltip("Override take's loop count to be infinite. If this is true, waitForComplete is ignored and this action will complete.")]
         public FsmBool loop;
-
-        [UIHint(UIHint.Variable)]
+        
         public FsmFloat startAt;
-        [UIHint(UIHint.Variable)]
         public FsmBool startAtIsFrame;
 
         private bool sequenceWaitCompleted = true;
@@ -25,7 +23,7 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
             waitForComplete = null;
             waitForCompleteEvent = null;
             loop = null;
-            startAt = null;
+            startAt = new FsmFloat { UseVariable=true };
             startAtIsFrame = null;
         }
 
@@ -62,7 +60,7 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
 
         public override void OnExit() {
             //just in case
-            if(!sequenceWaitCompleted && animate.currentPlayingSequence != null)
+            if(!sequenceWaitCompleted)
                 animate.takeCompleteCallback -= SequenceComplete;
         }
 
@@ -71,7 +69,7 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
             anim.takeCompleteCallback -= SequenceComplete;
 
             if(!FsmEvent.IsNullOrEmpty(waitForCompleteEvent))
-                Fsm.Event(waitForCompleteEvent);
+                Fsm.Event(animateGO, waitForCompleteEvent);
 
             Finish();
         }

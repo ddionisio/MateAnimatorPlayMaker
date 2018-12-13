@@ -38,9 +38,9 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
                 storeResult.Value = isPlaying;
 
             if(isPlaying)
-                Fsm.Event(isTrue);
+                Fsm.Event(animateGO, isTrue);
             else
-                Fsm.Event(isFalse);
+                Fsm.Event(animateGO, isFalse);
         }
 
         // Perform custom error checking here.
