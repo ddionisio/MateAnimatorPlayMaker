@@ -5,15 +5,17 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
     public class PlayTake : AnimateActionBase {
         public FsmString take;
 
-        [Tooltip("Wait for animation to finish before completing this action. Be careful when setting this to true, certain animations loop forever. Also, this is ignored if loop is set to true.")]
-        public FsmBool waitForComplete;
-
-        public FsmEvent waitForCompleteEvent;
-
         [Tooltip("Override take's loop count to be infinite. If this is true, waitForComplete is ignored and this action will complete.")]
         public FsmBool loop;
-        
+
+        [Tooltip("Wait for animation to finish before completing this action. Be careful when setting this to true, certain animations loop forever.")]
+        [HideIf("IsLoop")]
+        public FsmBool waitForComplete;
+        [HideIf("IsNotWaitForComplete")]
+        public FsmEvent waitForCompleteEvent;
+                        
         public FsmFloat startAt;
+        [HideIf("IsStartAtNone")]
         public FsmBool startAtIsFrame;
 
         private bool sequenceWaitCompleted = true;
@@ -72,6 +74,18 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
                 Fsm.Event(animateGO, waitForCompleteEvent);
 
             Finish();
+        }
+
+        public bool IsLoop() {
+            return loop.Value;
+        }
+
+        public bool IsNotWaitForComplete() {
+            return loop.Value || !waitForComplete.Value;
+        }
+
+        public bool IsStartAtNone() {
+            return startAt.IsNone;
         }
     }
 }
