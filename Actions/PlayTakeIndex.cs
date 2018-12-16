@@ -2,22 +2,21 @@
 using M8.Animator;
 
 namespace HutongGames.PlayMaker.Actions.M8.Animator {
-    [Tooltip("Play a take from the animator timeline.")]
-    public class PlayTake : AnimateActionBase {
-        [Tooltip("Name of the take to play.")]
-        public FsmString take;
+    [Tooltip("Play a take based on index from the animator timeline.")]
+    public class PlayTakeIndex : AnimateActionBase {
+        public FsmInt takeIndex;
 
         [Tooltip("Override take's loop count to be infinite. If this is true, waitForComplete is ignored and this action will complete.")]
         public FsmBool loop;
-        
+
         public FsmFloat startAt;
         [HideIf("IsStartAtNone")]
         public FsmBool startAtIsFrame;
-        
+
         public override void Reset() {
-            take = null;
+            takeIndex = 0;
             loop = null;
-            startAt = new FsmFloat { UseVariable=true };
+            startAt = new FsmFloat { UseVariable = true };
             startAtIsFrame = null;
         }
 
@@ -26,26 +25,27 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
             base.OnEnter();
 
             if(!startAt.IsNone) {
-                if(!string.IsNullOrEmpty(take.Value)) {
+                if(!takeIndex.IsNone) {
                     if(startAtIsFrame.Value)
-                        animate.PlayAtFrame(take.Value, startAt.Value, loop.Value);
+                        animate.PlayAtFrame(takeIndex.Value, startAt.Value, loop.Value);
                     else
-                        animate.PlayAtTime(take.Value, startAt.Value, loop.Value);
+                        animate.PlayAtTime(takeIndex.Value, startAt.Value, loop.Value);
                 }
                 else
-                    Debug.LogWarning("Take is empty.");
+                    Debug.LogWarning("Take Index is none.");
+
             }
             else {
-                if(!string.IsNullOrEmpty(take.Value)) {
-                    animate.Play(take.Value, loop.Value);
+                if(!takeIndex.IsNone) {
+                    animate.Play(takeIndex.Value, loop.Value);
                 }
                 else
-                    Debug.LogWarning("Take is empty.");
+                    Debug.LogWarning("Take Index is none.");
             }
 
             Finish();
         }
-        
+
         public bool IsStartAtNone() {
             return startAt.IsNone;
         }

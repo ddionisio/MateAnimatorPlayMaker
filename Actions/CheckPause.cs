@@ -28,6 +28,9 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
 
         // Code that runs every frame.
         public override void OnUpdate() {
+            if(!UpdateCache())
+                return;
+
             DoCheck();
         }
 
@@ -37,10 +40,7 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
             if(!storeResult.IsNone)
                 storeResult.Value = isPaused;
 
-            if(isPaused)
-                Fsm.Event(animateGO, isTrue);
-            else
-                Fsm.Event(animateGO, isFalse);
+            Fsm.Event(isPaused ? isTrue : isFalse);
         }
 
         // Perform custom error checking here.

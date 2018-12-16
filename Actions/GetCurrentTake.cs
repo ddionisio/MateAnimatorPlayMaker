@@ -6,8 +6,11 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
         [RequiredField]
         public FsmString output;
 
+        public FsmBool everyFrame;
+
         public override void Reset() {
             output = null;
+            everyFrame = false;
         }
 
         // Code that runs on entering the state.
@@ -16,7 +19,15 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
 
             output.Value = animate.currentPlayingTakeName;
 
-            Finish();
+            if(!everyFrame.Value)
+                Finish();
+        }
+
+        public override void OnUpdate() {
+            if(!UpdateCache())
+                return;
+
+            output.Value = animate.currentPlayingTakeName;
         }
     }
 }

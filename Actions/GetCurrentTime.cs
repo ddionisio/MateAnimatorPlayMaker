@@ -24,6 +24,9 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
         }
 
         public override void OnUpdate() {
+            if(!UpdateCache())
+                return;
+
             GrabValue();
         }
 

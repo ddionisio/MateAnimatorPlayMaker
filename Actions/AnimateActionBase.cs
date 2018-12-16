@@ -17,11 +17,20 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
 
         // Code that runs on entering the state.
         public override void OnEnter() {
+            UpdateCache();
+        }
+
+        /// <summary>
+        /// Update animate/animateGO, Returns true if animate is valid.
+        /// </summary>
+        public bool UpdateCache() {
             var curGO = Fsm.GetOwnerDefaultTarget(gameObject);
             if(animate == null || curGO != animateGO) {
                 animateGO = curGO;
                 animate = animateGO.GetComponent<Animate>();
             }
+
+            return animate != null;
         }
     }
 }

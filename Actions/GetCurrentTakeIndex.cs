@@ -1,24 +1,24 @@
 ﻿
 namespace HutongGames.PlayMaker.Actions.M8.Animator {
-    [Tooltip("Get the current time of the currently playing Take. Given value is set to 0 if no take is playing.")]
-    public class GetCurrentFrame : AnimateActionBase {
-        [RequiredField]
+    [Tooltip("Get the current take index that is playing.")]
+    public class GetCurrentTakeIndex : AnimateActionBase {
         [UIHint(UIHint.Variable)]
-        public FsmFloat output;
+        [RequiredField]
+        public FsmInt output;
 
-        public FsmBool fullElapse;
         public FsmBool everyFrame;
 
         public override void Reset() {
             output = null;
-            fullElapse = null;
             everyFrame = false;
         }
 
+        // Code that runs on entering the state.
         public override void OnEnter() {
             base.OnEnter();
 
-            GrabValue();
+            output.Value = animate.currentPlayingTakeIndex;
+
             if(!everyFrame.Value)
                 Finish();
         }
@@ -27,11 +27,7 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
             if(!UpdateCache())
                 return;
 
-            GrabValue();
-        }
-
-        void GrabValue() {
-            output.Value = fullElapse.Value ? animate.runningFullFrame : animate.runningFrame;
+            output.Value = animate.currentPlayingTakeIndex;
         }
     }
 }
