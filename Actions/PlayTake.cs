@@ -13,12 +13,15 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
         public FsmFloat startAt;
         [HideIf("IsStartAtNone")]
         public FsmBool startAtIsFrame;
+        [HideIf("IsLoop")]
+        public FsmBool waitFinish;
         
         public override void Reset() {
             take = null;
-            loop = null;
+            loop = false;
             startAt = new FsmFloat { UseVariable=true };
             startAtIsFrame = null;
+            waitFinish = false;
         }
 
         // Code that runs on entering the state.
@@ -43,11 +46,21 @@ namespace HutongGames.PlayMaker.Actions.M8.Animator {
                     Debug.LogWarning("Take is empty.");
             }
 
-            Finish();
+            if(!loop.Value && !waitFinish.Value)
+                Finish();
         }
-        
+
+        public override void OnUpdate() {
+            if(!animate.isPlaying || animate.currentPlayingTakeName != take.Value)
+                Finish();
+        }
+
         public bool IsStartAtNone() {
             return startAt.IsNone;
+        }
+
+        public bool IsLoop() {
+            return loop.Value;
         }
     }
 }
